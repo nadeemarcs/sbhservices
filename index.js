@@ -2,6 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const date = require('date-and-time');
 
 mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", {
   useNewUrlParser: true,
@@ -12,13 +13,14 @@ const invoiceSchema = {
 
   invoiceNo: String,
   Consultantfee: String,
-  Date: String,
+  Date: {type: Date, default: Date.now},
   Desc: String,
   Price: String,
   Qty: String,
   Total: String,
   amount: String,
   item: String
+
 };
 
 const Invoice = mongoose.model("invoices", invoiceSchema);
@@ -43,12 +45,8 @@ app.get("/invoice", function(req, res) {
 });
 
 app.post("/saveinvoice", function(req, res) {
-  // console.log(req.body.invoiceNo);
-  // let obj2 = JSON.stringify(req.body[1]);
-
-  //req.body = {};
-
-  console.log(req.headers);
+const dtvalue = date.format((new Date(mongoose.now)),
+  'DD/MM/YYYY HH:mm:ss');
 
   if (req.headers['content-type'] === 'application/json') {
     let data = '';
@@ -65,70 +63,36 @@ app.post("/saveinvoice", function(req, res) {
       }
     });
   }
-  console.log("dumping 1 ");
-  //let obj2 = JSON.parse(JSON.stringify(req.body));
+
+
   let obj2 = req.body;
+  date.format((new Date('December 17, 1995 03:24:00')),
+  'YYYY/MM/DD HH:mm:ss');
 
-  const keys = Object.keys(obj2);
-
-  //console.log(JSON.stringify(obj2));
-
-  //keys.forEach((key, index) => {
-   // console.log(`${key}: ${obj2[key]}`);
- // });
-  
- // Object.values(obj2).forEach(val => console.log(val));
-  //console.log(obj2[0]);
-  // console.log(obj2.Items[0].name);
-  
-  //for (const key in res.body["Invoice"]) {  
   for (const key in obj2) {
-    if (key === 'Invoice') {
-      console.log(`K ${key}: ${obj2["Invoice"].total}`)
-      console.log(`K ${key}: ${obj2[key].consultantfee}`)
+    for (let i = 0; i < obj2[key].length; i++) {
+      const invoice = new Invoice({
+        invoiceNo: obj2["Invoice"].invoiceNumber,
+        Consultantfee: obj2["Invoice"].Consultantfee,
+      //  Date: new ISODate(),
+        Desc: obj2[key][i].name,
+        Price: obj2[key][i].price,
+        Qty: obj2[key][i].Qty,
+        Total: obj2["Invoice"].total,
+        amount: obj2[key][i].amount,
+        
+      })
+      invoice.save(function(err, doc) {
+        if (err) res.status(500).send(err);
+
+      });
+
     }
-    if (key === 'Items')
-    {
-for (let i = 0; i < obj2[key].length; i++) {
-  
-    console.log("Array element" + i);
-  console.log(obj2[key][i].name);
-  console.log("------");
-      //console.log(` ${key}: ${obj2[key][0].name}`)
-}
-      
-    
-      //console.log(`K ${key}: ${obj2[key].consultantfee}`)
-    }
-  
+
   }
-  // console.log(req.body["Invoice"].invoiceNumber);
-  //} 
-  const invoice = new Invoice({
-    invoiceNo: req.body.invoiceNo,
-    Consultantfee: req.body.Consultantfee,
-    Date: req.body.Date,
-    Desc: req.body.Desc,
-    Price: req.body.email,
-    Qty: req.body.Qty,
-    Total: req.body.Total,
-    amount: req.body.amount,
-    item: req.body.item
-  });
+
   res.status(201).send("ok");
- 
 
-  User.insertMany([{InvoiceNo :{obj2["Invoice"].total]}).then(function(){
-    console.log("Data inserted")  // Success
-}).catch(function(error){
-    console.log(error)      // Failure
-}); 
-
-  
-  /*invoice.save(function(err, doc) {
-    if (err) res.status(500).send(err);
-    res.status(201).send(invoice);
-  });*/
 });
 
 app.listen(3000, function() {
