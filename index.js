@@ -76,23 +76,31 @@ app.post("/saveinvoice", function(req, res) {
   //keys.forEach((key, index) => {
    // console.log(`${key}: ${obj2[key]}`);
  // });
-  console.log("dumping 2");
+  
  // Object.values(obj2).forEach(val => console.log(val));
   //console.log(obj2[0]);
   // console.log(obj2.Items[0].name);
-  console.log("dumping");
+  
   //for (const key in res.body["Invoice"]) {  
   for (const key in obj2) {
     if (key === 'Invoice') {
-      console.log(`K ${key}: ${obj2[key].total}`)
+      console.log(`K ${key}: ${obj2["Invoice"].total}`)
       console.log(`K ${key}: ${obj2[key].consultantfee}`)
     }
-    if (key === 'Items') {
-      console.log("It...")
-      console.log(`K ${key}: ${obj2[key][0].name}`)
+    if (key === 'Items')
+    {
+for (let i = 0; i < obj2[key].length; i++) {
+  
+    console.log("Array element" + i);
+  console.log(obj2[key][i].name);
+  console.log("------");
+      //console.log(` ${key}: ${obj2[key][0].name}`)
+}
+      
+    
       //console.log(`K ${key}: ${obj2[key].consultantfee}`)
     }
-    console.log("--");
+  
   }
   // console.log(req.body["Invoice"].invoiceNumber);
   //} 
@@ -108,6 +116,15 @@ app.post("/saveinvoice", function(req, res) {
     item: req.body.item
   });
   res.status(201).send("ok");
+ 
+
+  User.insertMany([{InvoiceNo :{obj2["Invoice"].total]}).then(function(){
+    console.log("Data inserted")  // Success
+}).catch(function(error){
+    console.log(error)      // Failure
+}); 
+
+  
   /*invoice.save(function(err, doc) {
     if (err) res.status(500).send(err);
     res.status(201).send(invoice);
