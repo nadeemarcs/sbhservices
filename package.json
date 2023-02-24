@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf build && mkdir build",
+    "build": "npm run clean ",
+    "start": "node index.js"
+    
   },
   "keywords": [],
   "author": "",
