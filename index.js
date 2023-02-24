@@ -3,11 +3,15 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const date = require('date-and-time');
+import cors from 'cors';
+
 
 mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+let port = process.env.PORT || 8080;
 
 const invoiceSchema = {
 
@@ -34,6 +38,7 @@ const app = express();
 }));
 
 app.use(bodyParser.json());*/
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded());
@@ -95,6 +100,13 @@ const dtvalue = date.format((new Date(mongoose.now)),
 
 });
 
+
+var server = app.listen(port, function() {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('App listening at http://%s:%s', host, port);
+});
 app.listen(3000, function() {
   console.log("App is running on Port 3000");
 });
