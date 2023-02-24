@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
    
-    "build": "npm run clean ",
+    
     "start": "node index.js"
     
   },
