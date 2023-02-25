@@ -127,7 +127,7 @@ app.post("/saveinvoice", function(req, res) {
     Invoice.bulkInsert(models, function(err, results) {
       if (err) {
         console.log(err);
-        return res.status(501).json({error:"error check logs"});
+        return res.status(501).json({status: "err"});
      //   process.exit(1);
 
       } else {
