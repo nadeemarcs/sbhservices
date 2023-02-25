@@ -127,13 +127,13 @@ app.post("/saveinvoice", function(req, res) {
     Invoice.bulkInsert(models, function(err, results) {
       if (err) {
         console.log(err);
-        return res.status(501).json({});
-        process.exit(1);
+        return res.status(501).json({error:"error check logs"});
+     //   process.exit(1);
 
       } else {
         console.log(results);
-        res.status(201).json({ status: "ok" });
-        process.exit(0);
+       return res.status(201).json({ status: "ok" });
+       // process.exit(0);
       }
     });
   });
