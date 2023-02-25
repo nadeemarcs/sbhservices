@@ -3,10 +3,10 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const date = require('date-and-time');
-import cors from 'cors';
+//const cors = require('cors');
 
 
-const MONGODB_URI = process.env.MONGODB_URI;
+//const MONGODB_URI = process.env.MONGODB_URI;
 
 const options = {
   autoIndex: false, // Don't build indexes
@@ -47,9 +47,8 @@ const app = express();
 /*app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 app.use(bodyParser.json());*/
-app.use(cors());
+//app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded());
@@ -82,7 +81,7 @@ const dtvalue = date.format((new Date(mongoose.now)),
 
 
   let obj2 = req.body;
-  let saverec=0;
+  let saverec=600;
   date.format((new Date('December 17, 1995 03:24:00')),
   'YYYY/MM/DD HH:mm:ss');
 console.log("inside .... about to enter ");
@@ -103,15 +102,18 @@ console.log("inside .... about to enter ");
       })
       invoice.save(function(err, doc) {
        // if (err) res.status(500).send(err);
+        
         if(err) return res.status(501).json({})
         saverec=i;
+        console.log("Save" + saverec);
       });
 
     }
 
   }
 
- if (saverec <> 0) res.status(201).send("ok");
+ 
+    res.status(201).json({status:"ok"}); 
 
 });
 
