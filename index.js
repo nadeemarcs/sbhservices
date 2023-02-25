@@ -16,22 +16,27 @@ const options = {
   family: 4, // Use IPv4, skip trying IPv6
   useUnifiedTopology: true,
   useNewUrlParser: true
- //serverApi: ServerApiVersion.v1
+  //serverApi: ServerApiVersion.v1
 };
 
 //mongoose.connect(uri, options);
 
 
-mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
+const app = express();
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded());
+app.use(express.static(__dirname + '/public'));
+
+
 
 let port = process.env.PORT || 8080;
 
-const invoiceSchema = {
+const invoiceSchema = mongoose.Schema({
 
   invoiceNo: String,
   Consultantfee: String,
-  Date: {type: Date, default: Date.now},
+  Date: { type: Date, default: Date.now },
   Desc: String,
   Price: String,
   Qty: String,
@@ -39,32 +44,41 @@ const invoiceSchema = {
   amount: String,
   item: String
 
+});
+
+
+invoiceSchema.statics.bulkInsert = function(models, fn) {
+  if (!models || !models.length)
+    return fn(null);
+
+  var bulk = this.collection.initializeOrderedBulkOp();
+  if (!bulk)
+    return fn('bulkInsertModels: MongoDb connection is not yet established');
+
+  var model;
+  for (var i = 0; i < models.length; i++) {
+    model = models[i];
+
+  // console.log("model :" + models[i].);
+    bulk.insert(model.toJSON());
+  }
+
+  bulk.execute(fn);
 };
 
 const Invoice = mongoose.model("invoices", invoiceSchema);
 
-const app = express();
 
-//app.set("view engine", "ejs");
-
-/*app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());*/
-//app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(express.urlencoded());
-
-app.use(express.static(__dirname + '/public'));
 
 app.get("/invoice", function(req, res) {
   res.render("invoice");
 });
 
 app.post("/saveinvoice", function(req, res) {
-const dtvalue = date.format((new Date(mongoose.now)),
-  'DD/MM/YYYY HH:mm:ss');
+
+
+  const dtvalue = date.format((new Date(mongoose.now)),
+    'DD/MM/YYYY HH:mm:ss');
 
   if (req.headers['content-type'] === 'application/json') {
     let data = '';
@@ -82,41 +96,47 @@ const dtvalue = date.format((new Date(mongoose.now)),
     });
   }
 
-
   let obj2 = req.body;
-  let saverec=600;
+  let saverec = 600;
   date.format((new Date('December 17, 1995 03:24:00')),
-  'YYYY/MM/DD HH:mm:ss');
-console.log("inside .... about to enter ");
-  for (const key in obj2) {
-    console.log("inside 1");
-    for (let i = 0; i < obj2[key].length; i++) {
-      console.log("inside 2");
-      const invoice = new Invoice({
-        invoiceNo: obj2["Invoice"].invoiceNumber,
-        Consultantfee: obj2["Invoice"].Consultantfee,
-      //  Date: new ISODate(),
-        Desc: obj2[key][i].name,
-        Price: obj2[key][i].price,
-        Qty: obj2[key][i].Qty,
-        Total: obj2["Invoice"].total,
-        amount: obj2[key][i].amount,
-        
-      })
-      invoice.save(function(err, doc) {
-       // if (err) res.status(500).send(err);
-        
-        if(err) return res.status(501).json({})
-        saverec=i;
-        console.log("Save" + saverec);
-      });
+    'YYYY/MM/DD HH:mm:ss');
+  mongoose.set('strictQuery', false);
+  mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
+  mongoose.connection.on("open", function(err, conn) {
 
+    var model, models = [];
+
+    //for (var i=0; i<4; i++) 
+    for (const key in obj2) {
+      console.log("inside For 1" + key);
+      for (let i = 0; i < obj2[key].length; i++) {
+        invmodel = new Invoice();
+
+
+        invmodel.invoiceNo = obj2["Invoice"].invoiceNumber;
+        invmodel.Consultantfee = obj2["Invoice"].Consultantfee;
+        invmodel.Desc = obj2[key][i].name;
+        invmodel.Price = obj2[key][i].price;
+        invmodel.Qty = obj2[key][i].qty;
+        invmodel.amount = obj2[key][i].amount;
+       invmodel.Total = obj2["Invoice"].total;
+        models.push(invmodel);
+
+      }
     }
+    Invoice.bulkInsert(models, function(err, results) {
+      if (err) {
+        console.log(err);
+        return res.status(501).json({});
+        process.exit(1);
 
-  }
-
- 
-    res.status(201).json({status:"ok"}); 
+      } else {
+        console.log(results);
+        res.status(201).json({ status: "ok" });
+        process.exit(0);
+      }
+    });
+  });
 
 });
 
