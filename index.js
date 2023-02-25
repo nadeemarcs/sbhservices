@@ -73,9 +73,11 @@ const dtvalue = date.format((new Date(mongoose.now)),
   let obj2 = req.body;
   date.format((new Date('December 17, 1995 03:24:00')),
   'YYYY/MM/DD HH:mm:ss');
-
+console.log("inside .... about to enter ");
   for (const key in obj2) {
+    console.log("inside 1");
     for (let i = 0; i < obj2[key].length; i++) {
+      console.log("inside 2");
       const invoice = new Invoice({
         invoiceNo: obj2["Invoice"].invoiceNumber,
         Consultantfee: obj2["Invoice"].Consultantfee,
@@ -107,6 +109,6 @@ var server = app.listen(port, function() {
 
   console.log('App listening at http://%s:%s', host, port);
 });
-app.listen(3000, function() {
+/*app.listen(3000, function() {
   console.log("App is running on Port 3000");
-});
+});*/
