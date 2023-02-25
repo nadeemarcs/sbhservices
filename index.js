@@ -82,6 +82,7 @@ const dtvalue = date.format((new Date(mongoose.now)),
 
 
   let obj2 = req.body;
+  let saverec=0;
   date.format((new Date('December 17, 1995 03:24:00')),
   'YYYY/MM/DD HH:mm:ss');
 console.log("inside .... about to enter ");
@@ -101,15 +102,16 @@ console.log("inside .... about to enter ");
         
       })
       invoice.save(function(err, doc) {
-        if (err) res.status(500).send(err);
-
+       // if (err) res.status(500).send(err);
+        if(err) return res.status(501).json({})
+        saverec=i;
       });
 
     }
 
   }
 
-  res.status(201).send("ok");
+ if (saverec <> 0) res.status(201).send("ok");
 
 });
 
