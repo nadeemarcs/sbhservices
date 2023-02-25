@@ -15,8 +15,8 @@ const options = {
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
   family: 4, // Use IPv4, skip trying IPv6
   useUnifiedTopology: true,
-  useNewUrlParser: true,
-  serverApi: ServerApiVersion.v1
+  useNewUrlParser: true
+ //serverApi: ServerApiVersion.v1
 };
 
 //mongoose.connect(uri, options);
