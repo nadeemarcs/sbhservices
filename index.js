@@ -6,11 +6,21 @@ const date = require('date-and-time');
 import cors from 'cors';
 
 
+const MONGODB_URI = process.env.MONGODB_URI;
+
+const options = {
+  autoIndex: false, // Don't build indexes
+  maxPoolSize: 10, // Maintain up to 10 socket connections
+  serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  family: 4 // Use IPv4, skip trying IPv6
+};
+
+//mongoose.connect(uri, options);
+
+
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
 
 let port = process.env.PORT || 8080;
 
