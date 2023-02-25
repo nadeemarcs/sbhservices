@@ -6,6 +6,7 @@ const date = require('date-and-time');
 import cors from 'cors';
 
 
+mongoose.set('strictQuery', false);
 mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", {
   useNewUrlParser: true,
   useUnifiedTopology: true
