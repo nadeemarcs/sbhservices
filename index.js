@@ -145,13 +145,13 @@ app.post("/saveinvoice", function(req, res) {
       for (let i = 0; i < obj2[key].length; i++) {
         invmodel = new Invoice();
 
-
-        invmodel.invoiceNo = obj2["invoiceInfo"].invoiceNumber;
-        invmodel.Consultantfee = obj2["invoiceInfo"].Consultantfee;
-        invmodel.Desc = obj2[key][i].name;
+         invmodel.Desc = obj2[key][i].name;
         invmodel.Price = obj2[key][i].price;
         invmodel.Qty = obj2[key][i].qty;
         invmodel.amount = obj2[key][i].amount;
+        //invmodel.invoiceNo = obj2["invoiceInfo"].invoiceNumber;
+        invmodel.Consultantfee = obj2["invoiceInfo"].Consultantfee;
+       
        invmodel.Total = obj2["invoiceInfo"].total;
         models.push(invmodel);
 
