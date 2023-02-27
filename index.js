@@ -6,8 +6,6 @@ const date = require('date-and-time');
 const cors = require('cors');
 
 
-
-
 //const MONGODB_URI = process.env.MONGODB_URI;
 
 const options = {
