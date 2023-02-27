@@ -30,6 +30,8 @@ app.use(bodyParser.json());
 app.use(express.urlencoded());
 app.use(express.static(__dirname + '/public'));
 
+
+app.options('*', cors());
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -102,6 +104,7 @@ app.get("/invoice", function(req, res) {
   res.render("invoice");
 });
 
+app.options('/saveinvoice', cors());
 app.post("/saveinvoice", function(req, res) {
 
 
