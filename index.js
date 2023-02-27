@@ -3,7 +3,9 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const date = require('date-and-time');
-//const cors = require('cors');
+const cors = require('cors');
+
+
 
 
 //const MONGODB_URI = process.env.MONGODB_URI;
@@ -23,10 +25,18 @@ const options = {
 
 
 const app = express();
+
+app.use(cors())
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded());
 app.use(express.static(__dirname + '/public'));
+
+/*app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+}); */
 
 app.use(function (req, res, next) {
 
