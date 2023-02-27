@@ -132,7 +132,7 @@ app.post("/saveinvoice", function(req, res) {
   mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
   mongoose.connection.on("open", function(err, conn) {
 
-    var model, models = [];
+    var invmodel, models = [];
 
     //for (var i=0; i<4; i++) 
     for (const key in obj2) {
@@ -141,13 +141,13 @@ app.post("/saveinvoice", function(req, res) {
         invmodel = new Invoice();
 
 
-        invmodel.invoiceNo = obj2["Invoice"].invoiceNumber;
-        invmodel.Consultantfee = obj2["Invoice"].Consultantfee;
+        invmodel.invoiceNo = obj2["invoiceInfo"].invoiceNumber;
+        invmodel.Consultantfee = obj2["invoiceInfo"].Consultantfee;
         invmodel.Desc = obj2[key][i].name;
         invmodel.Price = obj2[key][i].price;
         invmodel.Qty = obj2[key][i].qty;
         invmodel.amount = obj2[key][i].amount;
-       invmodel.Total = obj2["Invoice"].total;
+       invmodel.Total = obj2["invoiceInfo"].total;
         models.push(invmodel);
 
       }
