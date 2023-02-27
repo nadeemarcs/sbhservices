@@ -65,7 +65,6 @@ app.all('/*', function(req, res, next) {
 let port = process.env.PORT || 8080;
 
 const invoiceSchema = mongoose.Schema({
-
   invoiceNo: String,
   Consultantfee: String,
   Date: { type: Date, default: Date.now },
