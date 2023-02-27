@@ -32,13 +32,13 @@ app.use(bodyParser.json());
 app.use(express.urlencoded());
 app.use(express.static(__dirname + '/public'));
 
-/*app.all('/*', function(req, res, next) {
+app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With,content-type");
   next();
-}); */
+}); 
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -58,7 +58,7 @@ app.use(function (req, res, next) {
 
     // Pass to next layer of middleware
     next();
-});
+});*/
 
 let port = process.env.PORT || 8080;
 
