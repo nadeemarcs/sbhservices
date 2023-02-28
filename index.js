@@ -35,8 +35,7 @@ app.options('*', cors());
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
- // res.header("Access-Control-Allow-Methods", "GET,OPTIONS,POST,PUT, PATCH, DELETE");
-  res.header("Access-Control-Allow-Methods", "GET,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT");
   next();
 }); 
 
@@ -65,15 +64,17 @@ app.all('/*', function(req, res, next) {
 let port = process.env.PORT || 8080;
 
 const invoiceSchema = mongoose.Schema({
-  invoiceNo: String,
-  Consultantfee: String,
+
+  invoiceNo: Number,
+  Consultantfee: Number,
   Date: { type: Date, default: Date.now },
   Desc: String,
-  Price: String,
-  Qty: String,
-  Total: String,
-  amount: String,
-  item: String
+  Price: Number,
+  Qty: Number,
+  Total: Number,
+  amount: Number,
+  itemCode: String,
+  customerName : String
 
 });
 
@@ -97,7 +98,7 @@ invoiceSchema.statics.bulkInsert = function(models, fn) {
   bulk.execute(fn);
 };
 
-const Invoice = mongoose.model("invoices", invoiceSchema);
+const Invoice = mongoose.model("pharmainvoices", invoiceSchema);
 
 
 
@@ -144,14 +145,15 @@ app.post("/saveinvoice", function(req, res) {
       for (let i = 0; i < obj2[key].length; i++) {
         invmodel = new Invoice();
 
-         invmodel.Desc = obj2[key][i].name;
-        invmodel.Price = obj2[key][i].price;
-        invmodel.Qty = obj2[key][i].qty;
-        invmodel.amount = obj2[key][i].amount;
-        invmodel.invoiceNo = obj2["invoiceInfo"].invoiceNumber;
-        invmodel.Consultantfee = obj2["invoiceInfo"].Consultantfee;
-       
-       invmodel.Total = obj2["invoiceInfo"].total;
+
+        invmodel.invoiceNo = Number(obj2["invoiceInfo"].invoiceNumber);
+        invmodel.Consultantfee = Number(obj2["invoiceInfo"].consultantfee);
+        invmodel.Desc = obj2[key][i].name;
+        invmodel.Price = Number(obj2[key][i].price);
+        invmodel.Qty = Number(obj2[key][i].qty);
+        invmodel.amount = Number(obj2[key][i].amount);
+       invmodel.Total = Number(obj2["invoiceInfo"].total);
+       invmodel.customerName = obj2["invoiceInfo"].customerName;
         models.push(invmodel);
 
       }
