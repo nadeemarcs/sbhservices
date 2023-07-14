@@ -134,7 +134,7 @@ app.post("/saveinvoice", function(req, res) {
   date.format((new Date('December 17, 1995 03:24:00')),
     'YYYY/MM/DD HH:mm:ss');
   mongoose.set('strictQuery', false);
-  mongoose.connect("mongodb+srv://nadeemshaik:nadeem05@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
+  mongoose.connect("mongodb+srv://nadeemshaik:xxcxcx@cluster0.bbpkwdp.mongodb.net/sribalajihosp", options);
   mongoose.connection.on("open", function(err, conn) {
 
     var invmodel, models = [];
